@@ -1,0 +1,80 @@
+import java.io.*;
+import java.net.*;
+import java.util.Scanner;
+
+public class Server {
+public static void main(String argv[])throws Exception{
+	ServerSocket serverSocket=new ServerSocket(6789);
+	Socket connectionSocket=serverSocket.accept();
+	Scanner scanner=new Scanner(connectionSocket.getInputStream());
+	DataOutputStream outToClient=new DataOutputStream(connectionSocket.getOutputStream());
+	String clientSentece=scanner.nextLine();
+	System.out.println("Received:"+ clientSentece);
+	String modifiedSentence= clientSentece.toUpperCase();
+	outToClient.writeBytes(modifiedSentence+ '\n');
+	scanner.close();
+	connectionSocket.close();
+}
+}
+Client :
+package c1;
+import java.io.*;
+import java.net.*;
+import java.util.Scanner;
+public class Clinet {
+	public static void main(String argv[])throws Exception{
+		Socket connectionSocket=new Socket("localhost",6789);
+		Scanner scanner, scannerFromSocket;
+		DataOutputStream outToServer;
+		String sentenceFromServer;
+		String clinetSentence;
+		
+		scanner = new Scanner(System.in);
+		scannerFromSocket =new Scanner(connectionSocket.getInputStream());
+		
+		outToServer =new DataOutputStream(connectionSocket.getOutputStream());
+		clinetSentence = scanner .nextLine();
+		outToServer.writeBytes(clinetSentence+'\n');
+		sentenceFromServer=scannerFromSocket.nextLine();
+        System.out.println(sentenceFromServer);
+        
+        while(true) {
+           if(clientSentence.equals("bye")){
+              scannerFromSocket.close();
+              scanner.close();
+              connectionSocket.close();
+         }
+
+        }
+        scannerFromSocket.close();
+        scanner.close();
+        connectionSocket.close();
+	}
+
+}
+3.
+Server :
+package s1;
+import java.net.*;
+import java.util.Scanner;
+import java.io.*;
+ public class Server {
+ 
+    public static void main(String argvs[]) throws Exception
+    {
+        Socket socket;
+        ServerSocket server = new ServerSocket(3456);;
+        socket = server.accept();
+        Scanner scannerFromClient = new Scanner(socket.getInputStream());
+        System.out.println("Connected with a Client!");
+        String clientMessage = "";
+        while (!clientMessage.equals("End")) {
+            clientMessage = scannerFromClient.nextLine();
+            System.out.println("Client say:" + clientMessage);
+        }
+
+        socket.close();
+        scannerFromClient.close();
+        System.out.println("Connection closed!");
+    }
+ }
