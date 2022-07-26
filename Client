@@ -1,0 +1,35 @@
+import java.net.*;
+import java.io.*;
+import java.util.Scanner;
+
+ public class Client {
+ 
+    public static void main(String argvs[]) throws Exception{
+        DataOutputStream outToServer;
+        Scanner scanner, scannerFromSocket;
+        String sentenceFromServer = "", clientSentence = "";
+        Socket connectionSocket;
+        connectionSocket = new Socket("localhost", 3456);
+        scanner = new Scanner(System.in);
+        scannerFromSocket = new Scanner(connectionSocket.getInputStream());
+        outToServer = new DataOutputStream(connectionSocket.getOutputStream());
+        BufferedReader server_input = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
+
+        while (!clientSentence.equals("End"))
+        {
+            System.out.print("\nEnter message: ");
+            clientSentence = scanner.nextLine();
+            outToServer.writeBytes(clientSentence + "\n");
+        }
+        System.out.println("Connection ended!");
+        try
+        {
+            outToServer.close();
+            connectionSocket.close();
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
+    }
+}
